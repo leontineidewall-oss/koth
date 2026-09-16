@@ -7,10 +7,11 @@
 <meta name="description" content="$KOTH. King of the hill, as a coin. A meme on pump.fun about holding the throne for as long as you can.">
 <meta property="og:title" content="$KOTH — hold the hill">
 <meta property="og:description" content="King of the hill, as a coin. Hold it as long as you can.">
-<meta property="og:image" content="og.png">
+<meta property="og:image" content="https://koth-flax.vercel.app/og.png">
+<meta property="og:url" content="https://koth-flax.vercel.app/">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="og.png">
+<meta name="twitter:image" content="https://koth-flax.vercel.app/og.png">
 <meta name="theme-color" content="#070605">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -34,9 +35,9 @@ section{scroll-margin-top:72px}
 
 /* nav */
 header{position:sticky;top:0;z-index:10;background:rgba(7,6,5,.86);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
-.nav{display:flex;align-items:center;gap:20px;height:56px}
-.brand{font-weight:700;color:var(--gold);text-decoration:none;letter-spacing:.02em}
-.nav nav{display:flex;gap:18px;margin-left:auto;font-size:13px;text-transform:lowercase}
+.nav{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:20px;height:56px}
+.nav nav{grid-column:2;display:flex;gap:22px;font-size:13px;text-transform:lowercase}
+.nav .btn{grid-column:3;justify-self:end}
 .nav nav a{text-decoration:none;color:var(--mute)}
 .nav nav a:hover,.nav nav a.on{color:var(--gold)}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:700 13px/1 "IBM Plex Mono",monospace;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;color:var(--bg);background:var(--gold);border:1px solid var(--gold);padding:11px 16px;cursor:pointer;white-space:nowrap}
@@ -125,8 +126,9 @@ footer{margin-top:120px;border-top:1px solid var(--line)}
 
 @media (max-width:860px){
   :root{--pad:16px}
-  .nav nav{display:none}
-  .nav .btn{margin-left:auto}
+  .nav{grid-template-columns:minmax(0,1fr)}
+  .nav nav{grid-column:1;justify-self:center;gap:14px;max-width:100%;overflow-x:auto;scrollbar-width:none}
+  .nav .btn{display:none}
   .throne{grid-template-columns:minmax(0,1fr);gap:28px}
   .live{grid-template-columns:repeat(2,minmax(0,1fr))}
   .words{grid-template-columns:minmax(0,1fr)}
@@ -148,7 +150,6 @@ footer{margin-top:120px;border-top:1px solid var(--line)}
 
 <header>
   <div class="col nav">
-    <a class="brand" href="#top">$KOTH</a>
     <nav aria-label="sections">
       <a href="#hill">hill</a><a href="#throne">throne</a><a href="#live">live</a><a href="#cannot">cannot</a><a href="#words">words</a><a href="#kit">kit</a>
     </nav>
