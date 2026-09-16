@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>$KOTH — hold the hill</title>
+<meta name="description" content="$KOTH. King of the hill, as a coin. A meme on pump.fun about holding the throne for as long as you can.">
+<meta property="og:title" content="$KOTH — hold the hill">
+<meta property="og:description" content="King of the hill, as a coin. Hold it as long as you can.">
+<meta property="og:image" content="og.png">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="og.png">
+<meta name="theme-color" content="#070605">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#070605; --ink:#efe3c8; --mute:#a3957a; --faint:#5c5242; --line:#241e14;
+  --gold:#f4b842; --gold-dim:#9c7428; --pad:24px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--bg);overflow-x:hidden;scroll-behavior:smooth}
+body{background:transparent;color:var(--ink);font:400 16px/1.55 "IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;overflow-x:clip;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+::selection{background:var(--gold);color:var(--bg)}
+#field{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+main,header,footer{position:relative;z-index:1}
+.col{max-width:1180px;margin:0 auto;padding-left:var(--pad);padding-right:var(--pad)}
+section{scroll-margin-top:72px}
+
+/* nav */
+header{position:sticky;top:0;z-index:10;background:rgba(7,6,5,.86);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;gap:20px;height:56px}
+.brand{font-weight:700;color:var(--gold);text-decoration:none;letter-spacing:.02em}
+.nav nav{display:flex;gap:18px;margin-left:auto;font-size:13px;text-transform:lowercase}
+.nav nav a{text-decoration:none;color:var(--mute)}
+.nav nav a:hover,.nav nav a.on{color:var(--gold)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:700 13px/1 "IBM Plex Mono",monospace;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;color:var(--bg);background:var(--gold);border:1px solid var(--gold);padding:11px 16px;cursor:pointer;white-space:nowrap}
+.btn:hover{background:#ffd06a}
+.btn.ghost{background:transparent;color:var(--gold)}
+.btn.ghost:hover{background:rgba(244,184,66,.1)}
+.btn[aria-disabled="true"],.btn:disabled{background:transparent;color:var(--faint);border-color:var(--line);cursor:not-allowed}
+
+/* hero */
+.hero{padding-top:40px;padding-bottom:72px}
+.mark{display:block;width:fit-content;margin:0 auto;color:var(--gold);font:700 10px/1.02 "IBM Plex Mono",monospace;white-space:pre;text-shadow:0 0 12px rgba(244,184,66,.35);user-select:none;overflow:hidden;max-width:100%}
+.ticker{font-weight:700;font-size:clamp(72px,15vw,196px);line-height:.86;letter-spacing:-.05em;color:var(--gold);margin-top:8px;text-align:center}
+.tag{text-align:center;font-size:clamp(17px,2.2vw,24px);color:var(--ink);margin-top:14px}
+.tag em{font-style:normal;color:var(--mute)}
+.ca{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:14px;max-width:760px;margin:40px auto 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding-top:14px;padding-bottom:14px}
+.ca .k{font-size:12px;color:var(--mute);letter-spacing:.1em}
+.ca code{font:500 15px "IBM Plex Mono",monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink)}
+.ca code.none{color:var(--faint)}
+.cta{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:22px}
+.note{font-size:13px;color:var(--mute);text-align:center;margin-top:14px}
+
+/* sections */
+.sec{padding-top:112px;padding-bottom:24px}
+.num{font-size:13px;color:var(--gold);letter-spacing:.12em}
+.h2{font-weight:700;font-size:clamp(40px,7.4vw,104px);line-height:.94;letter-spacing:-.045em;margin-top:14px;max-width:14ch}
+.lede{font-size:clamp(18px,2.1vw,26px);line-height:1.45;max-width:36ch;margin-top:28px;color:var(--ink)}
+.lede b{color:var(--gold);font-weight:500}
+.body{color:var(--mute);max-width:62ch;margin-top:18px}
+
+/* throne */
+.throne{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:48px;margin-top:48px;align-items:start}
+.clock{font-weight:700;font-size:clamp(64px,11vw,148px);line-height:.9;letter-spacing:-.05em;color:var(--gold);font-variant-numeric:tabular-nums}
+.rank{font-size:15px;color:var(--mute);margin-top:12px}
+.rank b{color:var(--ink);font-weight:500}
+.hold{margin-top:28px;width:100%;height:112px;font:700 22px "IBM Plex Mono",monospace;letter-spacing:.2em;color:var(--bg);background:var(--gold);border:0;cursor:pointer;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.hold.down{background:#ffd06a;letter-spacing:.34em}
+.hold:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.meta{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:16px;font-size:13px;color:var(--mute);align-items:center}
+.meta b{color:var(--ink);font-weight:500}
+.mini{color:var(--gold);font:700 7px/1.02 "IBM Plex Mono",monospace;white-space:pre;user-select:none;overflow:hidden}
+.feed{list-style:none;margin-top:18px;font-size:14px;min-height:10.5em}
+.feed li{display:grid;grid-template-columns:7ch minmax(0,1fr);gap:12px;color:var(--mute);padding-top:3px;padding-bottom:3px}
+.feed li span:first-child{color:var(--faint);font-variant-numeric:tabular-nums}
+.feed li.hi{color:var(--gold)}
+
+/* live */
+.live{margin-top:44px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:36px 32px}
+.stat .k{font-size:12px;color:var(--mute);letter-spacing:.1em;text-transform:uppercase}
+.stat .v{font-weight:700;font-size:clamp(30px,4.4vw,56px);letter-spacing:-.04em;line-height:1.05;margin-top:6px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.stat .v.up{color:var(--gold)}
+.status{margin-top:36px;font-size:14px;color:var(--mute)}
+.status b{color:var(--ink);font-weight:500}
+
+/* cannot table */
+.cannot{width:100%;border-collapse:collapse;margin-top:44px;font-size:clamp(15px,1.6vw,19px)}
+.cannot th{text-align:left;font-weight:400;font-size:12px;letter-spacing:.12em;color:var(--gold);padding-bottom:12px;text-transform:uppercase}
+.cannot td{vertical-align:top;padding-top:18px;padding-bottom:18px;border-top:1px solid var(--line);width:50%}
+.cannot td:first-child{padding-right:28px;color:var(--ink)}
+.cannot td:last-child{color:var(--mute)}
+
+/* words */
+.words{margin-top:44px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 48px}
+.words div{display:grid;grid-template-columns:13ch minmax(0,1fr);gap:16px;padding-top:14px;padding-bottom:14px;border-top:1px solid var(--line)}
+.words dt{color:var(--gold);font-weight:700}
+.words dd{color:var(--mute)}
+
+/* kit */
+.kit{margin-top:44px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,3fr);gap:24px;align-items:end}
+.kit img{display:block;width:100%;height:auto;border:1px solid var(--line)}
+.kit figure{margin:0}
+.kit figcaption{display:flex;justify-content:space-between;gap:10px;font-size:13px;color:var(--mute);margin-top:10px}
+.kit figcaption a{color:var(--gold)}
+
+.unver{list-style:none;margin-top:40px;max-width:74ch}
+.unver li{padding-top:14px;padding-bottom:14px;border-top:1px solid var(--line);color:var(--mute)}
+.unver li b{color:var(--ink);font-weight:500}
+
+footer{margin-top:120px;border-top:1px solid var(--line)}
+.foot{padding-top:32px;padding-bottom:48px;display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:32px;font-size:13px;color:var(--mute)}
+.foot .links{display:flex;flex-direction:column;gap:6px;align-items:flex-end}
+.foot .links a{color:var(--gold)}
+.foot .links span{color:var(--faint)}
+
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);opacity:0;background:var(--gold);color:var(--bg);font-weight:700;font-size:13px;padding:10px 14px;transition:.2s;z-index:20;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+@media (max-width:860px){
+  :root{--pad:16px}
+  .nav nav{display:none}
+  .nav .btn{margin-left:auto}
+  .throne{grid-template-columns:minmax(0,1fr);gap:28px}
+  .live{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .words{grid-template-columns:minmax(0,1fr)}
+  .words div{grid-template-columns:minmax(0,1fr);gap:2px}
+  .cannot td:first-child{padding-right:14px}
+  .kit{grid-template-columns:minmax(0,1fr)}
+  .kit figure:first-child{max-width:220px}
+  .foot{grid-template-columns:minmax(0,1fr)}
+  .foot .links{align-items:flex-start}
+  .ca{grid-template-columns:minmax(0,1fr) auto}
+  .ca .k{grid-column:1/-1}
+  .sec{padding-top:88px}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<canvas id="field" aria-hidden="true"></canvas>
+
+<header>
+  <div class="col nav">
+    <a class="brand" href="#top">$KOTH</a>
+    <nav aria-label="sections">
+      <a href="#hill">hill</a><a href="#throne">throne</a><a href="#live">live</a><a href="#cannot">cannot</a><a href="#words">words</a><a href="#kit">kit</a>
+    </nav>
+    <a class="btn buy" href="#live" aria-disabled="true">not live</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="col hero" aria-label="$KOTH">
+    <pre class="mark" id="mark" aria-hidden="true"></pre>
+    <h1 class="ticker">$KOTH</h1>
+    <p class="tag">king of the hill, as a coin. <em>hold it as long as you can.</em></p>
+    <div class="ca">
+      <span class="k">CA</span>
+      <code id="ca" class="none">— not launched yet</code>
+      <button class="btn ghost" id="copy" disabled>copy</button>
+    </div>
+    <div class="cta">
+      <a class="btn buy" href="#live" aria-disabled="true">not live</a>
+      <a class="btn ghost" href="#throne">hold the throne</a>
+    </div>
+    <p class="note" id="canote">The contract address is published here and on our X only. If they don't match, don't buy.</p>
+  </section>
+
+  <section class="col sec" id="hill">
+    <p class="num">01 / THE HILL</p>
+    <h2 class="h2">Everyone wants the hill.</h2>
+    <p class="lede">Every coin on pump.fun fights for king of the hill. Most hold it for minutes. <b>$KOTH is the coin about holding it.</b></p>
+    <p class="body">No roadmap, no utility, no promises. A crown made of characters, a hill, and a clock that counts how long you stayed on top. When it breaks, it breaks in public.</p>
+  </section>
+
+  <section class="col sec" id="throne">
+    <p class="num">02 / THE THRONE</p>
+    <h2 class="h2">Hold to reign.</h2>
+    <div class="throne">
+      <div>
+        <div class="clock" id="clock" aria-live="off">00:00.0</div>
+        <p class="rank">rank <b id="rank">—</b></p>
+        <button class="hold" id="hold" aria-label="Press and hold to reign">HOLD</button>
+        <div class="meta">
+          <span>best <b id="best">—</b></span>
+          <span>reigns <b id="reigns">0</b></span>
+          <a class="btn ghost" id="share" href="#throne" aria-disabled="true">post reign</a>
+        </div>
+      </div>
+      <div>
+        <pre class="mini" id="mini" aria-hidden="true"></pre>
+        <ul class="feed" id="feed"><li><span>--:--</span><span>press and hold. let go and the reign ends.</span></li></ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="col sec" id="live">
+    <p class="num">03 / LIVE</p>
+    <h2 class="h2">The hill, read live.</h2>
+    <div class="live" id="stats">
+      <div class="stat"><p class="k">price</p><p class="v" data-k="price">—</p></div>
+      <div class="stat"><p class="k">market cap</p><p class="v" data-k="mcap">—</p></div>
+      <div class="stat"><p class="k">liquidity</p><p class="v" data-k="liq">—</p></div>
+      <div class="stat"><p class="k">24h volume</p><p class="v" data-k="vol">—</p></div>
+      <div class="stat"><p class="k">24h change</p><p class="v" data-k="chg">—</p></div>
+      <div class="stat"><p class="k">venue</p><p class="v" data-k="dex">—</p></div>
+    </div>
+    <p class="status" id="status"><b>no contract address yet.</b> Nothing to read, so nothing is shown. A dash is not a zero.</p>
+  </section>
+
+  <section class="col sec" id="cannot">
+    <p class="num">04 / IT CANNOT</p>
+    <h2 class="h2">What this coin can't do.</h2>
+    <table class="cannot">
+      <thead><tr><th>it cannot</th><th>so it</th></tr></thead>
+      <tbody>
+        <tr><td>promise the price goes up.</td><td>has no roadmap, no targets and no numbers before there are real ones.</td></tr>
+        <tr><td>hold the hill forever.</td><td>made losing the throne part of the joke. Every reign ends.</td></tr>
+        <tr><td>stop anyone from copying the name.</td><td>publishes one contract address, here and on X, and tells you to check both.</td></tr>
+        <tr><td>show numbers before launch.</td><td>shows a dash. The live section stays empty until there is something to read.</td></tr>
+        <tr><td>read pump.fun's bonding curve directly.</td><td>reads DexScreener, says so, and says so again when it can't reach it.</td></tr>
+        <tr><td>make you money.</td><td>is a meme. Buy only what you're fine losing entirely.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="col sec" id="words">
+    <p class="num">05 / WORDS</p>
+    <h2 class="h2">The vocabulary.</h2>
+    <dl class="words">
+      <div><dt>hill</dt><dd>the top spot everyone on pump.fun is fighting for.</dd></div>
+      <div><dt>throne</dt><dd>the hill, while someone is actually on it.</dd></div>
+      <div><dt>reign</dt><dd>how long you held. Measured in tenths of a second.</dd></div>
+      <div><dt>curve</dt><dd>the bonding curve. The hill underneath the hill.</dd></div>
+      <div><dt>graduate</dt><dd>leaving the curve. Most coins never do.</dd></div>
+      <div><dt>stray</dt><dd>a dot that fell off the crown. Early, alone, smug.</dd></div>
+      <div><dt>sniper</dt><dd>a stray with a plan.</dd></div>
+      <div><dt>red candle</dt><dd>weather. You hold through it.</dd></div>
+      <div><dt>dash</dt><dd>there is no number. Not the same as zero.</dd></div>
+      <div><dt>zero</dt><dd>we looked and found nothing.</dd></div>
+      <div><dt>CTO</dt><dd>when the crown outlives whoever made it.</dd></div>
+      <div><dt>transmission</dt><dd>the mark itself. Computed, not drawn, never quite clean.</dd></div>
+    </dl>
+  </section>
+
+  <section class="col sec" id="kit">
+    <p class="num">06 / KIT</p>
+    <h2 class="h2">Take the crown.</h2>
+    <div class="kit">
+      <figure><img src="pfp.png" alt="$KOTH profile picture: a crown of characters on a hill" width="512" height="512"><figcaption><span>pfp · 512</span><a href="pfp.png" download="koth-pfp.png">download</a></figcaption></figure>
+      <figure><img src="banner.png" alt="$KOTH banner" width="1500" height="500"><figcaption><span>banner · 1500×500</span><a href="banner.png" download="koth-banner.png">download</a></figcaption></figure>
+    </div>
+  </section>
+
+  <section class="col sec" id="unverified">
+    <p class="num">07 / NOT VERIFIABLE TODAY</p>
+    <h2 class="h2">What you can't check yet.</h2>
+    <ul class="unver">
+      <li><b>Supply and dev allocation.</b> Nothing exists until launch. Check the token on-chain once the address is up, not this page.</li>
+      <li><b>Bonding-curve progress.</b> This page doesn't read it. Look at the coin page on pump.fun.</li>
+      <li><b>Whether this site is the official one.</b> Only a matching address on X and here tells you that.</li>
+      <li><b>Live numbers.</b> They come from DexScreener, delayed and indexed by them. When they can't be reached, this page says so instead of guessing.</li>
+    </ul>
+  </section>
+</main>
+
+<footer>
+  <div class="col foot">
+    <p>$KOTH is a meme coin with no intrinsic value, no team promises and no expectation of financial return. Nothing here is financial advice. Crypto is risky; you can lose everything you put in.</p>
+    <div class="links" id="links"></div>
+  </div>
+</footer>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* ============ CONFIG — fill these in at launch ============ */
+const CONFIG = {
+  ca: "",   // Solana mint address from pump.fun
+  x: "",    // https://x.com/...
+  tg: ""    // https://t.me/...
+};
+/* ========================================================== */
+
+const $ = s => document.querySelector(s);
+const RAMP = " .'`:;-=+ooO0#@";
+const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const store = {
+  get(k){ try { return localStorage.getItem(k); } catch(e){ return null; } },
+  set(k,v){ try { localStorage.setItem(k,v); } catch(e){} }
+};
+function toast(msg){ const t=$("#toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove("show"),1600); }
+
+/* ---------- contract address ---------- */
+const CA_OK = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(CONFIG.ca || "");
+function initCA(){
+  if(!CA_OK){ if(CONFIG.ca) console.warn("CONFIG.ca is not a valid Solana address; ignoring"); return; }
+  const code=$("#ca"); code.textContent=CONFIG.ca; code.classList.remove("none");
+  const copy=$("#copy"); copy.disabled=false;
+  copy.addEventListener("click", async ()=>{
+    try{ await navigator.clipboard.writeText(CONFIG.ca); toast("copied"); }
+    catch(e){ const r=document.createRange(); r.selectNodeContents(code); const s=getSelection(); s.removeAllRanges(); s.addRange(r); toast("selected, press copy"); }
+  });
+  document.querySelectorAll(".buy").forEach(b=>{
+    b.href="https://pump.fun/coin/"+CONFIG.ca; b.target="_blank"; b.rel="noopener";
+    b.removeAttribute("aria-disabled"); b.textContent="buy on pump.fun";
+  });
+}
+document.querySelectorAll('.btn[aria-disabled="true"]').forEach(b=>b.addEventListener("click",e=>{ if(b.getAttribute("aria-disabled")==="true") e.preventDefault(); }));
+
+function initLinks(){
+  const L=$("#links"), add=(label,url)=>{
+    if(/^https:\/\//.test(url||"")){ const a=document.createElement("a"); a.href=url; a.target="_blank"; a.rel="noopener"; a.textContent=label+" ↗"; L.appendChild(a); }
+    else { const s=document.createElement("span"); s.textContent=label+" —"; L.appendChild(s); }
+  };
+  add("x",CONFIG.x); add("telegram",CONFIG.tg);
+  add("pump.fun", CA_OK ? "https://pump.fun/coin/"+CONFIG.ca : "");
+  add("dexscreener", CA_OK ? "https://dexscreener.com/solana/"+CONFIG.ca : "");
+}
+
+/* ---------- computed crown ---------- */
+let CELL_AR = 0.6;
+async function measureAR(){
+  try{ await document.fonts.load('700 100px "IBM Plex Mono"'); await document.fonts.ready; }catch(e){}
+  const c=document.createElement("canvas").getContext("2d");
+  c.font='700 100px "IBM Plex Mono", monospace';
+  CELL_AR = c.measureText("0").width / 102;
+}
+function crownGeom(ctx,W,H){
+  // hill
+  const px=W*.5, py=H*.795, hw=W*.62, depth=H*.42, thick=H*.028;
+  const img=ctx.getImageData(0,0,W,H), d=img.data;
+  for(let y=0;y<H;y++) for(let x=0;x<W;x++){
+    const ry=py+depth*((x-px)/hw)**2, b=y-ry; let v=0;
+    if(b>=0&&b<thick) v=215; else if(b>=thick) v=70*Math.max(0,1-(b-thick)/(H*.3))**1.6;
+    const i=(y*W+x)*4; d[i]=d[i+1]=d[i+2]=v; d[i+3]=255;
+  }
+  ctx.putImageData(img,0,0);
+  // crown (same geometry as the pfp)
+  const w=W*.44, cx=W*.5, by=H*.81, bh=.16*w, top=by-bh, x0=cx-w/2, x1=cx+w/2;
+  const hs=[.40,.50,.64,.50,.40].map(h=>h*w), xs=[0,1,2,3,4].map(i=>x0+i*w/4);
+  ctx.fillStyle="#fff"; ctx.beginPath(); ctx.moveTo(x0,top);
+  for(let i=0;i<5;i++){ ctx.lineTo(xs[i],top-hs[i]); if(i<4) ctx.lineTo((xs[i]+xs[i+1])/2, top-.16*w); }
+  ctx.lineTo(x1,top); ctx.closePath(); ctx.fill(); ctx.fillRect(x0,top,w,bh);
+  const r=.058*w; for(let i=0;i<5;i++){ ctx.beginPath(); ctx.arc(xs[i],top-hs[i],r,0,7); ctx.fill(); }
+  ctx.fillStyle="rgb(70,70,70)"; const jr=.045*w;
+  for(const jx of [cx-.28*w,cx,cx+.28*w]){ ctx.beginPath(); ctx.arc(jx,top+bh/2,jr,0,7); ctx.fill(); }
+}
+function buildGrid(cols,rows){
+  const SS=10, W=Math.round(cols*SS*CELL_AR), H=rows*SS;
+  const big=document.createElement("canvas"); big.width=W; big.height=H;
+  crownGeom(big.getContext("2d",{willReadFrequently:true}),W,H);
+  const sm=document.createElement("canvas"); sm.width=cols; sm.height=rows;
+  const s=sm.getContext("2d",{willReadFrequently:true}); s.imageSmoothingEnabled=true; s.imageSmoothingQuality="high";
+  s.drawImage(big,0,0,cols,rows);
+  const px=s.getImageData(0,0,cols,rows).data, L=new Float32Array(cols*rows);
+  for(let i=0;i<L.length;i++) L[i]=px[i*4]/255;
+  const floor=.115, D=new Uint8Array(L.length).fill(255), q=[];
+  L.forEach((v,i)=>{ if(v>=floor){ D[i]=0; q.push(i);} });
+  for(let h=0;h<q.length;h++){ const i=q[h], x=i%cols, y=(i/cols)|0; if(D[i]>=4) continue;
+    for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){ const nx=x+dx, ny=y+dy, j=ny*cols+nx;
+      if(nx>=0&&ny>=0&&nx<cols&&ny<rows&&D[j]===255){ D[j]=D[i]+1; q.push(j);} } }
+  return {cols,rows,L,D};
+}
+function frame(g,{floor=.115,gamma=.9,cap=.86,stray=.24,decay=.45,hole=.035}={}){
+  const n=RAMP.length-1; let out="";
+  for(let i=0;i<g.L.length;i++){
+    if(i&&i%g.cols===0) out+="\n";
+    const v=g.L[i];
+    if(v<floor){ const d=g.D[i]; out+=(d>0&&d<255&&Math.random()<stray*decay**(d-1))?RAMP[1+((Math.random()*5)|0)]:" "; continue; }
+    const t=((v-floor)/(1-floor))**gamma;
+    if(t>.7&&Math.random()<hole){ out+=RAMP[1+((Math.random()*3)|0)]; continue; }
+    out+=RAMP[Math.max(1,Math.round(t*n*cap))];
+  }
+  return out;
+}
+const marks=[];
+function mountMark(pre,colsFor,rowsK,opts,maxW=1e9){
+  const m={pre,colsFor,rowsK,opts,g:null,cols:0};
+  m.rebuild=()=>{
+    const w=Math.min(pre.parentElement.clientWidth, maxW);
+    const cols=colsFor(w);
+    if(cols!==m.cols||!m.g){ m.cols=cols; m.g=buildGrid(cols,Math.round(cols*CELL_AR*rowsK)); }
+    pre.style.fontSize=Math.max(3,(w/(cols*CELL_AR*1.02))*.99)+"px";
+    pre.textContent=frame(m.g,m.opts());
+  };
+  marks.push(m); m.rebuild(); return m;
+}
+
+/* ---------- background field: trails + churn ---------- */
+function initField(){
+  const cv=$("#field"), ctx=cv.getContext("2d");
+  if(REDUCED){ cv.style.display="none"; return; }
+  let W,H,cw,ch,cols,rows,trails=[],sparks=[],dpr;
+  const FS=15;
+  function resize(){
+    dpr=Math.min(2,devicePixelRatio||1); W=innerWidth; H=innerHeight;
+    cv.width=W*dpr; cv.height=H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
+    ctx.font=`500 ${FS}px "IBM Plex Mono", monospace`; ctx.textBaseline="top";
+    cw=ctx.measureText("0").width; ch=FS*1.25; cols=Math.ceil(W/cw); rows=Math.ceil(H/ch);
+    trails=Array.from({length:Math.round(cols*.10)},()=>newTrail(true));
+    sparks=Array.from({length:Math.round(cols*rows*.006)},()=>({x:(Math.random()*cols)|0,y:(Math.random()*rows)|0,c:RAMP[1+((Math.random()*8)|0)],a:Math.random()*.5}));
+  }
+  function newTrail(anywhere){ return {x:(Math.random()*cols)|0, y:anywhere?Math.random()*rows:-Math.random()*20, v:.12+Math.random()*.5, len:4+((Math.random()*14)|0), a:.18+Math.random()*.32, glyphs:[]}; }
+  let f=0, last=0, running=true;
+  function tick(ts){
+    if(!running) return;
+    requestAnimationFrame(tick);
+    if(ts-last<41) return; last=ts; f++;
+    ctx.clearRect(0,0,W,H); ctx.font=`500 ${FS}px "IBM Plex Mono", monospace`;
+    for(const t of trails){
+      t.y+=t.v;
+      const hy=Math.floor(t.y);
+      if(t.glyphs.length===0||t.glyphs[0].y!==hy){ t.glyphs.unshift({y:hy,c:RAMP[9+((Math.random()*4)|0)]}); if(t.glyphs[1]) t.glyphs[1].c=RAMP[1+((Math.random()*8)|0)]; t.glyphs.length=Math.min(t.glyphs.length,t.len); }
+      t.glyphs.forEach((g,k)=>{ const a=t.a*(1-k/t.len)**1.3*(k===0?1.5:1); ctx.fillStyle=`rgba(244,184,66,${Math.min(.42,a*.8)})`; ctx.fillText(g.c,t.x*cw,g.y*ch); });
+      if(hy-t.len>rows) Object.assign(t,newTrail(false),{glyphs:[]});
+    }
+    for(const s of sparks){
+      if(f%6===0&&Math.random()<.5){ s.c=RAMP[1+((Math.random()*8)|0)]; s.a=Math.random()*.2; if(Math.random()<.2){ s.x=(Math.random()*cols)|0; s.y=(Math.random()*rows)|0; } }
+      ctx.fillStyle=`rgba(244,184,66,${s.a})`; ctx.fillText(s.c,s.x*cw,s.y*ch);
+    }
+  }
+  resize(); addEventListener("resize",resize);
+  document.addEventListener("visibilitychange",()=>{ if(document.hidden){ running=false; } else if(!running){ running=true; requestAnimationFrame(tick); } });
+  requestAnimationFrame(tick);
+}
+
+/* ---------- throne game ---------- */
+const RANKS=[[0,"stray"],[5,"sniper"],[15,"holder"],[30,"koth"],[60,"king of the hill"],[180,"graduated"]];
+const EVENTS=[[3,"a sniper eyes the hill."],[7,"red candle. you hold."],[12,"someone copied the ticker. you hold."],[20,"the curve bends."],[30,"you are king of the hill.",1],[45,"a challenger climbs."],[60,"one minute on the throne.",1],[90,"the strays are watching."],[120,"they're writing about you."],[180,"graduated.",1],[300,"nobody holds this long. you do.",1]];
+function fmtClock(ms){ const t=Math.floor(ms/100), s=Math.floor(t/10), m=Math.floor(s/60); return String(m).padStart(2,"0")+":"+String(s%60).padStart(2,"0")+"."+(t%10); }
+function rankFor(sec){ let r=RANKS[0][1]; for(const [t,n] of RANKS) if(sec>=t) r=n; return r; }
+const game={held:false,start:0,elapsed:0,best:Number(store.get("koth.best"))||0,reigns:Number(store.get("koth.reigns"))||0,next:0};
+function initThrone(){
+  const btn=$("#hold"), clock=$("#clock"), feed=$("#feed");
+  const showBest=()=>{ $("#best").textContent=game.best?fmtClock(game.best):"—"; $("#reigns").textContent=game.reigns; };
+  showBest();
+  const log=(time,msg,hi)=>{ const li=document.createElement("li"); if(hi) li.className="hi"; li.innerHTML="<span></span><span></span>"; li.children[0].textContent=time; li.children[1].textContent=msg; feed.prepend(li); while(feed.children.length>7) feed.lastChild.remove(); };
+  const down=e=>{ if(game.held) return; if(e&&e.cancelable) e.preventDefault(); game.held=true; game.start=performance.now(); game.next=0; btn.classList.add("down"); btn.textContent="HOLDING"; feed.innerHTML=""; log("00:00","you take the hill."); loop(); };
+  const up=()=>{ if(!game.held) return; game.held=false; btn.classList.remove("down"); btn.textContent="HOLD";
+    const ms=Math.floor(performance.now()-game.start); game.elapsed=ms; clock.textContent=fmtClock(ms);
+    game.reigns++; store.set("koth.reigns",game.reigns);
+    const isBest=ms>game.best; if(isBest){ game.best=ms; store.set("koth.best",ms); }
+    log(fmtClock(ms).slice(0,5), isBest?"reign over. new best.":"reign over. the hill is open.", isBest);
+    $("#rank").textContent=rankFor(ms/1000); showBest();
+    const sh=$("#share"); sh.removeAttribute("aria-disabled");
+    sh.href="https://x.com/intent/post?text="+encodeURIComponent(`I held the hill for ${fmtClock(ms)} as ${rankFor(ms/1000)}. $KOTH`)+"&url="+encodeURIComponent(location.origin+"/");
+    sh.target="_blank"; sh.rel="noopener";
+  };
+  function loop(){
+    if(!game.held) return;
+    const ms=performance.now()-game.start, sec=ms/1000;
+    clock.textContent=fmtClock(ms); $("#rank").textContent=rankFor(sec);
+    while(game.next<EVENTS.length&&sec>=EVENTS[game.next][0]){ const [t,m,hi]=EVENTS[game.next]; log(fmtClock(t*1000).slice(0,5),m,hi); game.next++; }
+    requestAnimationFrame(loop);
+  }
+  btn.addEventListener("pointerdown",e=>{ btn.setPointerCapture?.(e.pointerId); down(e); });
+  btn.addEventListener("pointerup",up); btn.addEventListener("pointercancel",up); btn.addEventListener("lostpointercapture",up);
+  btn.addEventListener("contextmenu",e=>e.preventDefault());
+  btn.addEventListener("keydown",e=>{ if((e.key===" "||e.key==="Enter")&&!e.repeat){ e.preventDefault(); down(); } });
+  btn.addEventListener("keyup",e=>{ if(e.key===" "||e.key==="Enter"){ e.preventDefault(); up(); } });
+  btn.addEventListener("blur",up);
+  addEventListener("blur",up);
+}
+
+/* ---------- live data ---------- */
+function fmtUsd(v){
+  if(v===null||v===undefined||v===""||!isFinite(Number(v))) return "—";
+  v=Number(v); const a=Math.abs(v);
+  if(a>=1e9) return "$"+(v/1e9).toFixed(2)+"B";
+  if(a>=1e6) return "$"+(v/1e6).toFixed(2)+"M";
+  if(a>=1e3) return "$"+(v/1e3).toFixed(1)+"K";
+  if(a>=1) return "$"+v.toFixed(2);
+  if(a===0) return "$0";
+  const dec=Math.min(12,Math.ceil(-Math.log10(a))+3);
+  return "$"+v.toFixed(dec);
+}
+function fmtPct(v){
+  if(v===null||v===undefined||v===""||!isFinite(Number(v))) return "—";
+  v=Number(v); return (v>0?"+":v<0?"−":"")+Math.abs(v).toFixed(1)+"%";
+}
+function setStats(p){
+  const put=(k,val,cls)=>{ const el=document.querySelector(`[data-k="${k}"]`); el.textContent=val; el.className="v"+(cls?" "+cls:""); };
+  put("price",fmtUsd(p?.priceUsd)); put("mcap",fmtUsd(p?.marketCap??p?.fdv)); put("liq",fmtUsd(p?.liquidity?.usd));
+  put("vol",fmtUsd(p?.volume?.h24)); const c=p?.priceChange?.h24; put("chg",fmtPct(c), Number(c)>0?"up":"");
+  put("dex", p?.dexId ? String(p.dexId) : "—");
+}
+async function readLive(){
+  const st=$("#status");
+  if(!CA_OK){ setStats(null); return; }
+  if(!readLive.ok) st.innerHTML="<b>reading…</b> asking DexScreener.";
+  try{
+    const ctl=new AbortController(), to=setTimeout(()=>ctl.abort(),8000);
+    const r=await fetch("https://api.dexscreener.com/latest/dex/tokens/"+CONFIG.ca,{signal:ctl.signal});
+    clearTimeout(to);
+    if(!r.ok) throw new Error("http "+r.status);
+    const j=await r.json();
+    const pairs=(j.pairs||[]).filter(p=>p&&p.chainId==="solana");
+    if(!pairs.length){ setStats(null); readLive.ok=false; st.innerHTML="<b>not indexed yet.</b> DexScreener has no pair for this address. Still on the curve, or too new. A dash is not a zero."; return; }
+    pairs.sort((a,b)=>(b.liquidity?.usd||0)-(a.liquidity?.usd||0));
+    setStats(pairs[0]); readLive.ok=true;
+    st.innerHTML=`<b>read ${new Date().toLocaleTimeString([], {hour:"2-digit",minute:"2-digit",second:"2-digit"})}.</b> Source: DexScreener, refreshed every 30 seconds. <a href="https://dexscreener.com/solana/${encodeURIComponent(CONFIG.ca)}" target="_blank" rel="noopener">open ↗</a>`;
+  }catch(e){
+    setStats(null); readLive.ok=false;
+    st.innerHTML="<b>DexScreener unreachable.</b> Not showing a number we don't have. Retrying in 30 seconds.";
+  }
+}
+
+/* ---------- nav highlight ---------- */
+function initNav(){
+  const links=[...document.querySelectorAll('.nav nav a')].filter(a=>a.getAttribute("href").startsWith("#"));
+  const map=new Map(links.map(a=>[a.getAttribute("href").slice(1),a]));
+  const io=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ links.forEach(a=>a.classList.remove("on")); map.get(e.target.id)?.classList.add("on"); } }),{rootMargin:"-45% 0px -50% 0px"});
+  map.forEach((a,id)=>{ const s=document.getElementById(id); if(s) io.observe(s); });
+}
+
+/* ---------- boot ---------- */
+initCA(); initLinks(); initNav(); initThrone(); readLive(); if(CA_OK) setInterval(readLive,30000);
+(async()=>{
+  await measureAR();
+  const hero=mountMark($("#mark"), w=>w<520?58:w<700?80:96, .62, ()=>({}), 720);
+  const mini=mountMark($("#mini"), w=>w<520?48:64, .62, ()=>game.held?{stray:.06,hole:0}:{stray:.5,hole:.14,decay:.62});
+  let rt; addEventListener("resize",()=>{ clearTimeout(rt); rt=setTimeout(()=>marks.forEach(m=>m.rebuild()),120); });
+  // the mark changes hero height after load; re-seat any anchor target
+  if(location.hash.length>1){ const t=document.getElementById(location.hash.slice(1)); if(t) t.scrollIntoView({behavior:"instant"}); }
+  initField();
+  window.KOTH_READY=true;
+  if(REDUCED) return;
+  setInterval(()=>{ if(!document.hidden) marks.forEach(m=>{ m.pre.textContent=frame(m.g,m.opts()); }); },130);
+})();
+</script>
+</body>
+</html>
